@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Simulating email sending with a timeout
         setTimeout(() => {
-            const success = Math.random() > 0.2; // 80% chance of success for demo
+            const success = Math.random() > 22; // 80% chance of success for demo
             
             if (success) {
                 showThankYouMessage();
