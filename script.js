@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }, 1500);
         
-        Uncomment and modify this code to use EmailJS for actual implementation
+    
         
         emailjs.send('service_2zqbwko', 'template_zlsg7xj', {
             name: feedbackData.name,
