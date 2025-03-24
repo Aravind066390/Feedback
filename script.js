@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
             showErrorMessage();
             console.error('Email failed to send', error);
         });
-        */
+        
     }
     
     // Function to show thank you message
