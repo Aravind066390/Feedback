@@ -49,19 +49,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 showErrorMessage();
             }
         }, 1500);
-        
-    
-        
+        const messageBody = `
+        Email: ${feedbackData.email}
+        Department: ${feedbackData.department}
+        Rating: ${feedbackData.rating}
+        Feedback Type: ${feedbackData.feedbackType}
+        Module Affected: ${feedbackData.moduleAffected}
+        Feedback Details: ${feedbackData.feedbackDetails}
+        Urgency: ${feedbackData.urgency}
+        Timestamp: ${feedbackData.timestamp}
+        `;
         emailjs.send('service_2zqbwko', 'template_zlsg7xj', {
             name: feedbackData.name,
-            email: feedbackData.email,
-            department: feedbackData.department,
-            rating: feedbackData.rating,
-            feedbackType: feedbackData.feedbackType,
-            moduleAffected: feedbackData.moduleAffected,
-            feedbackDetails: feedbackData.feedbackDetails,
-            urgency: feedbackData.urgency,
-            timestamp: feedbackData.timestamp
+            message: messageBody
         }, '3iDRLwwn_yUQ')
         .then(function(response) {
             showThankYouMessage();
