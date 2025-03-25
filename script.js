@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
     
         
-        emailjs.send('service_2zqbwko', 'template_pwxadwb', {
+        emailjs.send('service_2zqbwko', 'template_5gl88ss', {
             name: feedbackData.name,
             email: feedbackData.email,
             department: feedbackData.department,
