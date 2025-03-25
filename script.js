@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Initialize EmailJS with your User ID
-    emailjs.init('YOUR_USER_ID');
+    emailjs.init('3iDRLwwn_yUQ');
 
     // Get DOM elements
     const feedbackForm = document.getElementById('feedbackForm');
