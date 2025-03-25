@@ -3,57 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Futuristic Feedback Form 2050</title>
-    <a rel="stylesheet" href="styles.css">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <title>Inventory Management Feedback</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Feedback Hub 2050</h1>
-        <form id="feedbackForm" class="glass-card">
-            <input type="text" name="name" placeholder="Your Name" required>
-            <input type="email" name="email" placeholder="Your Email" required>
-            <input type="text" name="department" placeholder="Department (Optional)">
-            <select name="feedbackType">
-                <option value="">Feedback Type (Optional)</option>
-                <option>Bug Report</option>
-                <option>Feature Request</option>
-                <option>General Feedback</option>
-            </select>
-            <input type="text" name="moduleAffected" placeholder="Module Affected (Optional)">
-            <select name="rating">
-                <option value="">Rate Us (Optional)</option>
-                <option>1 Star</option>
-                <option>2 Stars</option>
-                <option>3 Stars</option>
-                <option>4 Stars</option>
-                <option>5 Stars</option>
-            </select>
-            <select name="urgency">
-                <option value="">Urgency (Optional)</option>
-                <option>Low</option>
-                <option>Normal</option>
-                <option>High</option>
-            </select>
-            <textarea name="feedbackDetails" placeholder="Share your detailed feedback..." required></textarea>
-            <button type="submit" class="glow-button">Submit Feedback</button>
-        </form>
-
-        <div id="thankYouMessage" class="hidden glass-card message-card">
-            <h2>Thank You!</h2>
-            <p>Your futuristic feedback has been transmitted successfully.</p>
-            <p id="successComment"></p>
-            <button id="newFeedbackBtn" class="glow-button">Submit Another Feedback</button>
-        </div>
-
-        <div id="errorMessage" class="hidden glass-card message-card">
-            <h2>Oops!</h2>
-            <p>Something went wrong in the transmission.</p>
-            <p id="failureComment"></p>
-            <button id="tryAgainBtn" class="glow-button">Try Again</button>
+    <div class="feedback-container">
+        <div class="feedback-card">
+            <h2>Inventory Management Feedback</h2>
+            <form id="feedbackForm">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        placeholder="Enter your name" 
+                        required
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="Enter your email" 
+                        required
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Feedback</label>
+                    <textarea 
+                        id="message" 
+                        name="message" 
+                        placeholder="Tell us about your experience with our inventory management system" 
+                        rows="4" 
+                        required
+                    ></textarea>
+                </div>
+                
+                <button type="submit" id="submitBtn">Send Feedback</button>
+            </form>
         </div>
     </div>
 
-    <script src="feedback.js"></script>
+    <div id="toast-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
