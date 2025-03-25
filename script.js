@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('EmailJS library not loaded. Make sure to include the EmailJS script.');
         return;
     }
-
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
     // Initialize EmailJS with your User ID
     emailjs.init('3iDRLwwn_yUQ');
 
