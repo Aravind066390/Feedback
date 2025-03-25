@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize EmailJS
     (function() {
-        emailjs.init("YOUR_PUBLIC_KEY"); // Replace with your EmailJS public key
+        emailjs.init("3iDRLwwn_yUQ"); // Replace with your EmailJS public key
     })();
 
     const form = document.getElementById('feedbackForm');
@@ -50,8 +50,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Send email using EmailJS
         emailjs.send(
-            'YOUR_SERVICE_ID',    // Replace with your service ID
-            'YOUR_TEMPLATE_ID',   // Replace with your template ID
+            'service_2zqbwko',    // Replace with your service ID
+            'template_5gl88ss',   // Replace with your template ID
             {
                 from_name: name,
                 from_email: email,
