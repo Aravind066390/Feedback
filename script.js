@@ -44,14 +44,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         emailjs.send('service_2zqbwko', 'template_zlsg7xj', {
             name: feedbackData.name,
-            email: feedbackData.email,
-            department: feedbackData.department,
-            rating: feedbackData.rating,
-            feedbackType: feedbackData.feedbackType,
-            moduleAffected: feedbackData.moduleAffected,
-            feedbackDetails: feedbackData.feedbackDetails,
-            urgency: feedbackData.urgency,
-            timestamp: feedbackData.timestamp,
             message: messageBody
         }, '3iDRLwwn_yUQ')
         .then(function(response) {
