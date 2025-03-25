@@ -1,6 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize EmailJS (add your public key)
-    emailjs.init('3iDRLwwn_yUQ');
+    // Validate EmailJS configuration
+    if (typeof emailjs === 'undefined') {
+        console.error('EmailJS library not loaded. Make sure to include the EmailJS script.');
+        return;
+    }
+
+    // Initialize EmailJS with your User ID
+    emailjs.init('YOUR_USER_ID');
 
     // Get DOM elements
     const feedbackForm = document.getElementById('feedbackForm');
@@ -9,51 +15,87 @@ document.addEventListener('DOMContentLoaded', function() {
     const newFeedbackBtn = document.getElementById('newFeedbackBtn');
     const tryAgainBtn = document.getElementById('tryAgainBtn');
 
+    // Validate form inputs before submission
+    function validateForm(formData) {
+        const requiredFields = ['name', 'email', 'feedbackDetails'];
+        for (const field of requiredFields) {
+            if (!formData.get(field) || formData.get(field).trim() === '') {
+                alert(`Please fill in the ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}.`);
+                return false;
+            }
+        }
+
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.get('email'))) {
+            alert('Please enter a valid email address.');
+            return false;
+        }
+
+        return true;
+    }
+
     // Handle form submission
     feedbackForm.addEventListener('submit', function(event) {
         event.preventDefault();
 
         // Get form data
         const formData = new FormData(feedbackForm);
-        const feedbackData = {};
+
+        // Validate form
+        if (!validateForm(formData)) {
+            return;
+        }
 
         // Convert FormData to object
+        const feedbackData = {};
         for (const [key, value] of formData.entries()) {
             feedbackData[key] = value;
         }
 
         // Add timestamp
-        feedbackData.timestamp = new Date().toISOString();
+        feedbackData.timestamp = new Date().toLocaleString();
+
+        // Disable submit button to prevent multiple submissions
+        const submitButton = feedbackForm.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        submitButton.textContent = 'Sending...';
 
         // Send the feedback data to EmailJS
-        sendFeedbackToEmail(feedbackData);
+        sendFeedbackToEmail(feedbackData, submitButton);
     });
 
     // Function to send feedback to EmailJS
-    function sendFeedbackToEmail(feedbackData) {
+    function sendFeedbackToEmail(feedbackData, submitButton) {
         const messageBody = `
+        Name: ${feedbackData.name}
         Email: ${feedbackData.email}
-        Department: ${feedbackData.department}
-        Rating: ${feedbackData.rating}
-        Feedback Type: ${feedbackData.feedbackType}
-        Module Affected: ${feedbackData.moduleAffected}
+        Department: ${feedbackData.department || 'Not specified'}
+        Rating: ${feedbackData.rating || 'Not rated'}
+        Feedback Type: ${feedbackData.feedbackType || 'General'}
+        Module Affected: ${feedbackData.moduleAffected || 'Not specified'}
         Feedback Details: ${feedbackData.feedbackDetails}
-        Urgency: ${feedbackData.urgency}
+        Urgency: ${feedbackData.urgency || 'Normal'}
         Timestamp: ${feedbackData.timestamp}
         `;
 
-        emailjs.send('service_2zqbwko', 'template_zlsg7xj', {
-            name: feedbackData.name,
+        emailjs.send('service_2zqbwko', 'template_5gl88ss', {
+            from_name: feedbackData.name,
+            from_email: feedbackData.email,
             message: messageBody
-        }, '3iDRLwwn_yUQ')
+        })
         .then(function(response) {
             showThankYouMessage();
             console.log('Email sent successfully!', response);
-            console.log('Data sent:', feedbackData);
         })
         .catch(function(error) {
             showErrorMessage();
             console.error('Email failed to send:', error);
+        })
+        .finally(function() {
+            // Re-enable submit button
+            submitButton.disabled = false;
+            submitButton.textContent = 'Submit Feedback';
         });
     }
 
