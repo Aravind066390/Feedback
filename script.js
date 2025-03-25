@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize EmailJS
     (function() {
-        emailjs.init("3iDRLwwn_yUQ"); // Replace with your EmailJS public key
+        emailjs.init("3iDRLwwn_yUQ-WlTf"); // Replace with your EmailJS public key
     })();
 
     const form = document.getElementById('feedbackForm');
