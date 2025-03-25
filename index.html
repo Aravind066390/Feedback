@@ -124,6 +124,17 @@
         </footer>
     </div>
 
-    <script src="script.js"></script>
+    <!-- EmailJS Library -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+<!-- Your Custom Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize EmailJS (replace with YOUR public key)
+        emailjs.init('YOUR_USER_ID');
+
+        // Rest of the JavaScript code...
+    });
+</script>
 </body>
 </html>
