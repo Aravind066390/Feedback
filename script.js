@@ -1,108 +1,75 @@
-document.addEventListener('DOMContentLoaded', function () {
-    if (typeof emailjs === 'undefined') {
-        console.error('EmailJS library not loaded.');
-        return;
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize EmailJS
+    (function() {
+        emailjs.init("YOUR_PUBLIC_KEY"); // Replace with your EmailJS public key
+    })();
+
+    const form = document.getElementById('feedbackForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const toastContainer = document.getElementById('toast-container');
+
+    // Toast function
+    function showToast(message, type = 'success') {
+        const toast = document.createElement('div');
+        toast.classList.add('toast', type);
+        toast.textContent = message;
+        toastContainer.appendChild(toast);
+
+        // Show toast
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 10);
+
+        // Remove toast after 3 seconds
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                toastContainer.removeChild(toast);
+            }, 300);
+        }, 3000);
     }
-    emailjs.init('3iDRLwwn_yUQ');
 
-    const feedbackForm = document.getElementById('feedbackForm');
-    const thankYouMessage = document.getElementById('thankYouMessage');
-    const errorMessage = document.getElementById('errorMessage');
-    const successComment = document.getElementById('successComment');
-    const failureComment = document.getElementById('failureComment');
-    const newFeedbackBtn = document.getElementById('newFeedbackBtn');
-    const tryAgainBtn = document.getElementById('tryAgainBtn');
+    // Form submission handler
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
 
-    feedbackForm.addEventListener('submit', function (event) {
-        event.preventDefault();
-        const formData = new FormData(feedbackForm);
+        // Get form values
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const message = document.getElementById('message').value.trim();
 
-        if (!validateForm(formData)) return;
+        // Validate inputs
+        if (!name || !email || !message) {
+            showToast('Please fill in all fields', 'error');
+            return;
+        }
 
-        const feedbackData = Object.fromEntries(formData.entries());
-        feedbackData.timestamp = new Date().toLocaleString();
+        // Disable submit button
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
 
-        const submitButton = feedbackForm.querySelector('button[type="submit"]');
-        submitButton.disabled = true;
-        submitButton.textContent = 'Sending...';
-
-        sendFeedback(feedbackData, submitButton);
-    });
-
-    function validateForm(formData) {
-        const requiredFields = ['name', 'email', 'feedbackDetails'];
-        for (const field of requiredFields) {
-            if (!formData.get(field).trim()) {
-                alert(`Please fill in the ${field}.`);
-                return false;
+        // Send email using EmailJS
+        emailjs.send(
+            'YOUR_SERVICE_ID',    // Replace with your service ID
+            'YOUR_TEMPLATE_ID',   // Replace with your template ID
+            {
+                from_name: name,
+                from_email: email,
+                message: message
             }
-        }
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(formData.get('email'))) {
-            alert('Please enter a valid email address.');
-            return false;
-        }
-        return true;
-    }
-
-    function sendFeedback(data, button) {
-        const messageContent = `
-Name: ${data.name}
-Email: ${data.email}
-Department: ${data.department || 'Not specified'}
-Rating: ${data.rating || 'Not rated'}
-Feedback Type: ${data.feedbackType || 'General'}
-Module Affected: ${data.moduleAffected || 'Not specified'}
-Feedback Details: ${data.feedbackDetails}
-Urgency: ${data.urgency || 'Normal'}
-Timestamp: ${data.timestamp}
-        `;
-
-        emailjs.send('service_2zqbwko', 'template_5gl88ss', {
-            from_name: data.name,
-            from_email: data.email,
-            message: messageContent
-        })
-            .then(function (response) {
-                showThankYou(`Your feedback was sent successfully! (Status: ${response.status})`);
-            })
-            .catch(function (error) {
-                showError(`Failed to send email. Error: ${error.text || error}`);
-            })
-            .finally(function () {
-                button.disabled = false;
-                button.textContent = 'Submit Feedback';
-            });
-    }
-
-    function showThankYou(comment) {
-        successComment.textContent = comment;
-        feedbackForm.classList.add('hidden');
-        thankYouMessage.classList.remove('hidden');
-        newFeedbackBtn.classList.remove('hidden');
-        thankYouMessage.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function showError(comment) {
-        failureComment.textContent = comment;
-        feedbackForm.classList.add('hidden');
-        errorMessage.classList.remove('hidden');
-        tryAgainBtn.classList.remove('hidden');
-        errorMessage.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    newFeedbackBtn.addEventListener('click', function () {
-        feedbackForm.reset();
-        feedbackForm.classList.remove('hidden');
-        thankYouMessage.classList.add('hidden');
-        newFeedbackBtn.classList.add('hidden');
-        successComment.textContent = '';
-    });
-
-    tryAgainBtn.addEventListener('click', function () {
-        feedbackForm.classList.remove('hidden');
-        errorMessage.classList.add('hidden');
-        tryAgainBtn.classList.add('hidden');
-        failureComment.textContent = '';
+        ).then(
+            function(response) {
+                showToast('Feedback submitted successfully!');
+                form.reset();
+            },
+            function(error) {
+                showToast('Failed to submit feedback. Please try again.', 'error');
+                console.error('EmailJS Error:', error);
+            }
+        ).finally(() => {
+            // Re-enable submit button
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Send Feedback';
+        });
     });
 });
