@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Initialize EmailJS
     if (typeof emailjs === 'undefined') {
         console.error('EmailJS library not loaded.');
         return;
@@ -9,6 +8,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const feedbackForm = document.getElementById('feedbackForm');
     const thankYouMessage = document.getElementById('thankYouMessage');
     const errorMessage = document.getElementById('errorMessage');
+    const successComment = document.getElementById('successComment');
+    const failureComment = document.getElementById('failureComment');
     const newFeedbackBtn = document.getElementById('newFeedbackBtn');
     const tryAgainBtn = document.getElementById('tryAgainBtn');
 
@@ -16,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
         const formData = new FormData(feedbackForm);
 
-        // Validate inputs
         if (!validateForm(formData)) return;
 
         const feedbackData = Object.fromEntries(formData.entries());
@@ -63,13 +63,11 @@ Timestamp: ${data.timestamp}
             from_email: data.email,
             message: messageContent
         })
-            .then(function () {
-                showThankYou();
-                console.log('Feedback sent successfully!');
+            .then(function (response) {
+                showThankYou(`Your feedback was sent successfully! (Status: ${response.status})`);
             })
             .catch(function (error) {
-                showError();
-                console.error('Sending failed:', error);
+                showError(`Failed to send email. Error: ${error.text || error}`);
             })
             .finally(function () {
                 button.disabled = false;
@@ -77,14 +75,16 @@ Timestamp: ${data.timestamp}
             });
     }
 
-    function showThankYou() {
+    function showThankYou(comment) {
+        successComment.textContent = comment;
         feedbackForm.classList.add('hidden');
         thankYouMessage.classList.remove('hidden');
         newFeedbackBtn.classList.remove('hidden');
         thankYouMessage.scrollIntoView({ behavior: 'smooth' });
     }
 
-    function showError() {
+    function showError(comment) {
+        failureComment.textContent = comment;
         feedbackForm.classList.add('hidden');
         errorMessage.classList.remove('hidden');
         tryAgainBtn.classList.remove('hidden');
@@ -96,11 +96,13 @@ Timestamp: ${data.timestamp}
         feedbackForm.classList.remove('hidden');
         thankYouMessage.classList.add('hidden');
         newFeedbackBtn.classList.add('hidden');
+        successComment.textContent = '';
     });
 
     tryAgainBtn.addEventListener('click', function () {
         feedbackForm.classList.remove('hidden');
         errorMessage.classList.add('hidden');
         tryAgainBtn.classList.add('hidden');
+        failureComment.textContent = '';
     });
 });
